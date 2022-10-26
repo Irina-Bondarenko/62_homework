@@ -1,7 +1,7 @@
 import * as React from "react";
 import TextField from "@mui/material/TextField";
-import Slider from '@mui/material/Slider';
 import {SliderPrice} from "./SliderPrice";
+import {RatingSIze} from "./RatingSIze";
 
 import "./css/filter.css";
 
@@ -11,16 +11,20 @@ class Filters extends React.Component {
 
   render() {
 
-    const { handler} = this.props
+    const { searchHandler, priceHandler } = this.props
 
     return (
         <div>
       <div className="searching-filter">
-        <TextField onChange={handler} id="outlined-search" label="Search field" type="search" />
+        <TextField onChange={searchHandler} id="outlined-search" label="Search field" type="search" />
       </div>
 
           <div className="price-filter">
-            <SliderPrice />
+            <SliderPrice priceHandler={priceHandler} />
+          </div>
+
+          <div className="rating-filter">
+            <RatingSIze />
           </div>
 
         </div>

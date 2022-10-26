@@ -116,7 +116,9 @@ class Catalog extends React.PureComponent {
 
   searchValue = ({target}) => {
     this.setState({titleFilterValue: target.value})
-
+  }
+  priceValue = (value) => {
+    this.setState({priceFilterMin: value[0], priceFilterMax: value[1]})
   }
 
 
@@ -151,7 +153,7 @@ class Catalog extends React.PureComponent {
             </div>
             <div className="catalog-goods col-9">
               <div className="goods-filters">
-                <Filters handler={this.searchValue}/>
+                <Filters searchHandler={this.searchValue} priceHandler={this.priceValue}/>
               </div>
               <div className="goods-goods d-flex">
                 {isLoadingProducts && (

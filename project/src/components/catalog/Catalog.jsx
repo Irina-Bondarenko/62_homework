@@ -28,7 +28,7 @@ class Catalog extends React.PureComponent {
       isNewFilter: false,
       isInStockFilter: false,
       isSaleFilter: false,
-      categoryFilter: [],
+      categoryFilter: "",
 
     };
   }
@@ -124,6 +124,11 @@ class Catalog extends React.PureComponent {
           product.isSale
       )
 
+      const categoriesData = product.categories;
+      isPass = isPass && (
+          categoriesData.includes(categoryFilter)
+      )
+
 
         return isPass;
 
@@ -167,6 +172,14 @@ class Catalog extends React.PureComponent {
 
   }
 
+  categoryHandler = (value) => {
+    this.setState((currentState) => {
+      return {
+        categoryFilter: value
+      }
+    })
+  }
+
 
 
 
@@ -188,6 +201,7 @@ class Catalog extends React.PureComponent {
       isSaleFilter,
       categoryFilter,
     } = this.state;
+
     const isLoadingProducts = goodsQueryStatus === queryState.loading || goodsQueryStatus === queryState.initial;
     const isSuccessProducts = goodsQueryStatus === queryState.success;
     const isErrorProducts = goodsQueryStatus === queryState.error;
@@ -207,7 +221,12 @@ class Catalog extends React.PureComponent {
               )}
 
               {!isLoadingCategories && isSuccessCategories && (
-                  <Categories categories={categories} />
+                  <Categories
+                      categories={categories}
+                      categoryFilter={categoryFilter}
+                      categoryHandler={this.categoryHandler}
+                  />
+
               )}
 
               {isErrorCategories && (

@@ -109,6 +109,7 @@ class Catalog extends React.PureComponent {
       )
 
 
+
         return isPass;
 
     })

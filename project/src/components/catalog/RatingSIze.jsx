@@ -3,10 +3,11 @@ import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 
 export function RatingSIze(props) {
-    const { ratingValue } = props;
+    const { ratingHandler, ratingFilter } = props;
 
     const ratingChangeHandler = ({target}) => {
-        ratingValue(target.value)
+        const ratingValue = parseFloat(target.value)*20;
+        ratingHandler(ratingValue)
 
     }
     return (

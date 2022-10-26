@@ -17,11 +17,10 @@ class ItemGood extends Component {
           <h3>{title}</h3>
           <p>{description}</p>
           <p className="price"><b>Price is: {price} $</b></p>
-          <p>{categories}</p>
           <img className="good-img" src={`${photo}?v=${id}`} alt={id} />
-          <p>{"PRODUCT RATING IS -" + " " + rating}</p>
           {isNew && <p className="new-product">NEW PRODUCT</p>}
           {isInStock && <p className="in-stock-product">PRODUCT IS IN STOCK</p>}
+          {isSale && <p className="in-sale-product">SALE!!!</p>}
 
         </div>
       </div>

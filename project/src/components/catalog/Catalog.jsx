@@ -23,11 +23,10 @@ class Catalog extends React.PureComponent {
 
       titleFilterValue: '',
       priceFilterMin: 0,
-      priceFilterMax: 300,
-      ratingFilterMin: 0,
-      ratingFilterMax: 99999999,
+      priceFilterMax: 1000,
+      ratingFilter: 100,
       isNewFilter: false,
-      isinStockFilter: false,
+      isInStockFilter: false,
       isSaleFilter: false,
       categoryFilter: [],
 
@@ -88,10 +87,9 @@ class Catalog extends React.PureComponent {
       titleFilterValue,
       priceFilterMin,
       priceFilterMax,
-      ratingFilterMin,
-      ratingFilterMax,
+      ratingFilter,
       isNewFilter,
-      isinStockFilter,
+      isInStockFilter,
       isSaleFilter,
       categoryFilter} = this.state;
 
@@ -108,6 +106,23 @@ class Catalog extends React.PureComponent {
           price >= priceFilterMin && price <= priceFilterMax
       )
 
+      const rating = parseFloat(product.rating);
+      isPass = isPass && (
+          rating <= ratingFilter
+      )
+
+      if (isInStockFilter)
+      isPass = isPass && (
+          product.isInStock
+      )
+      if (isNewFilter)
+      isPass = isPass && (
+          product.isNew
+      )
+      if (isSaleFilter)
+      isPass = isPass && (
+          product.isSale
+      )
 
 
         return isPass;
@@ -116,23 +131,63 @@ class Catalog extends React.PureComponent {
 
   }
 
-  searchValue = ({target}) => {
-    this.setState({titleFilterValue: target.value})
+  searchHandler = (value) => {
+    this.setState({titleFilterValue: value})
   }
-  priceValue = (value) => {
-    this.setState({priceFilterMin: value[0], priceFilterMax: value[1]})
+  priceHandler = (priceMin, priceMax) => {
+    this.setState({priceFilterMin: priceMin, priceFilterMax: priceMax})
   }
-  ratingValue = (value) => {
-    const valueToNumber= parseFloat(value);
-    this.setState({ratingFilterMin: valueToNumber})
+  ratingHandler = (value) => {
+    this.setState({ratingFilter: value})
+  }
+
+  isNewCheckboxHandler = (value) => {
+    this.setState((currentState) => {
+      return {
+      isNewFilter: value
+      }
+    })
+  }
+
+  isSaleCheckboxHandler = (value) => {
+    this.setState((currentState) => {
+      return {
+        isSaleFilter: value
+      }
+    })
 
   }
+
+  isInStockCheckboxHandler = (value) => {
+    this.setState((currentState) => {
+      return {
+        isInStockFilter: value
+      }
+    })
+
+  }
+
+
+
 
 
   render() {
 
-
-    const {goods, goodsQueryStatus, goodsQueryError, categories, categoriesQueryStatus, categoriesQueryError } = this.state;
+    const {goods,
+      goodsQueryStatus,
+      goodsQueryError,
+      categories,
+      categoriesQueryStatus,
+      categoriesQueryError,
+      titleFilterValue,
+      priceFilterMin,
+      priceFilterMax,
+      ratingFilter,
+      isNewFilter,
+      isInStockFilter,
+      isSaleFilter,
+      categoryFilter,
+    } = this.state;
     const isLoadingProducts = goodsQueryStatus === queryState.loading || goodsQueryStatus === queryState.initial;
     const isSuccessProducts = goodsQueryStatus === queryState.success;
     const isErrorProducts = goodsQueryStatus === queryState.error;
@@ -162,7 +217,23 @@ class Catalog extends React.PureComponent {
             </div>
             <div className="catalog-goods col-9">
               <div className="goods-filters">
-                <Filters searchHandler={this.searchValue} priceHandler={this.priceValue} ratingValue={this.ratingValue}/>
+                <Filters
+                    titleFilterValue={titleFilterValue}
+                    priceFilterMin={priceFilterMin}
+                    priceFilterMax={priceFilterMax}
+                    ratingFilter={ratingFilter}
+                    isNewFilter={isNewFilter}
+                    isInStockFilter={isInStockFilter}
+                    isSaleFilter={isSaleFilter}
+                    categoryFilter={categoryFilter}
+                    searchHandler={this.searchHandler}
+                         priceHandler={this.priceHandler}
+                         ratingHandler={this.ratingHandler}
+                         isNewCheckboxHandler={this.isNewCheckboxHandler}
+                         isSaleCheckboxHandler={this.isSaleCheckboxHandler}
+                         isInStockCheckboxHandler={this.isInStockCheckboxHandler}
+                />
+
               </div>
               <div className="goods-goods d-flex">
                 {isLoadingProducts && (

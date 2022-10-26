@@ -2,34 +2,85 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import {SliderPrice} from "./SliderPrice";
 import {RatingSIze} from "./RatingSIze";
+import {CheckBoxes} from "./CheckBoxes";
+import PropTypes from "prop-types";
 
 import "./css/filter.css";
 
 
-class Filters extends React.Component {
+export function Filters(props){
+    const {
+        titleFilterValue,
+        priceFilterMax,
+        priceFilterMin,
+        ratingFilter,
+        isInStockFilter,
+        isNewFilter,
+        isSaleFilter,
+        searchHandler,
+        priceHandler,
+        ratingHandler,
+        isNewCheckboxHandler,
+        isSaleCheckboxHandler,
+        isInStockCheckboxHandler,
+    } = props
 
+    const titleChangeHandler = ({target}) => {
+        const value = target.value;
+        searchHandler(value)
+    }
 
-  render() {
-
-    const { searchHandler, priceHandler, ratingValue } = this.props
 
     return (
-        <div>
+        <>
       <div className="searching-filter">
-        <TextField onChange={searchHandler} id="outlined-search" label="Search field" type="search" />
+        <TextField onChange={titleChangeHandler} id="outlined-search" value={titleFilterValue} label="Search field" type="search" />
       </div>
 
           <div className="price-filter">
-            <SliderPrice priceHandler={priceHandler} />
+            <SliderPrice
+                priceHandler={priceHandler}
+                priceFilterMax={priceFilterMax}
+                priceFilterMin={priceFilterMin}
+            />
           </div>
 
           <div className="rating-filter">
-            <RatingSIze ratingValue={ratingValue} />
+            <RatingSIze
+                ratingHandler={ratingHandler}
+                ratingFilter={ratingFilter}
+            />
           </div>
 
-        </div>
+            <div className="checkboxes-filter">
+                <CheckBoxes
+                    isNewFilter={isNewFilter}
+                    isInStockFilter={isInStockFilter}
+                    isSaleFilter={isSaleFilter}
+                    isNewCheckboxHandler={isNewCheckboxHandler}
+                    isSaleCheckboxHandler={isSaleCheckboxHandler}
+                    isInStockCheckboxHandler={isInStockCheckboxHandler}
+                />
+            </div>
+
+        </>
     );
-  }
 }
 
-export { Filters };
+Filters.propTypes ={
+    titleFilterValue:PropTypes.string,
+    priceFilterMin:PropTypes.number,
+    priceFilterMax:PropTypes.number,
+    ratingFilter:PropTypes.number,
+    isNewFilter:PropTypes.bool,
+    isInStockFilter:PropTypes.bool,
+    isSaleFilter:PropTypes.bool,
+    // categoryFilter:PropTypes.string,
+    priceHandler:PropTypes.func,
+    ratingHandler:PropTypes.func,
+    isNewCheckboxHandler:PropTypes.func,
+    isSaleCheckboxHandler:PropTypes.func,
+    isInStockCheckboxHandler:PropTypes.func,
+    searchHandler: PropTypes.func,
+}
+

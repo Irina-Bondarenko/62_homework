@@ -19,6 +19,12 @@
     font-weight: 500;
 }
 
+.in-sale-product {
+    background-color: palevioletred;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: 500;
+}
 .price {
     border: 1px solid lightgrey;
     border-radius: 5px;

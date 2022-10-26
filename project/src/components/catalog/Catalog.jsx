@@ -108,6 +108,7 @@ class Catalog extends React.PureComponent {
           price >= priceFilterMin && price <= priceFilterMax
       )
 
+
         return isPass;
 
     })
@@ -120,9 +121,16 @@ class Catalog extends React.PureComponent {
   priceValue = (value) => {
     this.setState({priceFilterMin: value[0], priceFilterMax: value[1]})
   }
+  ratingValue = (value) => {
+    const valueToNumber= parseFloat(value);
+    this.setState({ratingFilterMin: valueToNumber})
+
+  }
 
 
   render() {
+
+
     const {goods, goodsQueryStatus, goodsQueryError, categories, categoriesQueryStatus, categoriesQueryError } = this.state;
     const isLoadingProducts = goodsQueryStatus === queryState.loading || goodsQueryStatus === queryState.initial;
     const isSuccessProducts = goodsQueryStatus === queryState.success;
@@ -153,7 +161,7 @@ class Catalog extends React.PureComponent {
             </div>
             <div className="catalog-goods col-9">
               <div className="goods-filters">
-                <Filters searchHandler={this.searchValue} priceHandler={this.priceValue}/>
+                <Filters searchHandler={this.searchValue} priceHandler={this.priceValue} ratingValue={this.ratingValue}/>
               </div>
               <div className="goods-goods d-flex">
                 {isLoadingProducts && (

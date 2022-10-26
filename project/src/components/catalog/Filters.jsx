@@ -11,7 +11,7 @@ class Filters extends React.Component {
 
   render() {
 
-    const { searchHandler, priceHandler } = this.props
+    const { searchHandler, priceHandler, ratingValue } = this.props
 
     return (
         <div>
@@ -24,7 +24,7 @@ class Filters extends React.Component {
           </div>
 
           <div className="rating-filter">
-            <RatingSIze />
+            <RatingSIze ratingValue={ratingValue} />
           </div>
 
         </div>

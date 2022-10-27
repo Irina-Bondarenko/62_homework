@@ -1,4 +1,3 @@
-import React, { Component } from "react";
 import "./css/categories.css";
 import { ItemCategory } from "./ItemCategory";
 import PropTypes from "prop-types";

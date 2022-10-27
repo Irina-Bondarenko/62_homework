@@ -1,12 +1,11 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import { Goods } from "./Goods";
 import { Categories } from "./Categories";
 import "./css/catalog.css";
 import { Filters } from "./Filters";
-import {queryState} from "./css/queryState";
-import {getProductList} from "./api";
-import {getCategoriesList} from "./api";
-
+import { queryState } from "./css/queryState";
+import { getProductList } from "./api";
+import { getCategoriesList } from "./api";
 
 class Catalog extends React.PureComponent {
   constructor(props) {
@@ -21,7 +20,7 @@ class Catalog extends React.PureComponent {
       categoriesQueryStatus: queryState.initial,
       categoriesQueryError: null,
 
-      titleFilterValue: '',
+      titleFilterValue: "",
       priceFilterMin: 0,
       priceFilterMax: 1000,
       ratingFilter: 100,
@@ -29,61 +28,57 @@ class Catalog extends React.PureComponent {
       isInStockFilter: false,
       isSaleFilter: false,
       categoryFilter: "",
-
     };
   }
 
-
   componentDidMount() {
-    this.loadProductList()
-    this.loadCategories()
+    this.loadProductList();
+    this.loadCategories();
   }
 
   loadProductList = () => {
     this.setState({
-      goodsQueryStatus: queryState.loading
-    })
+      goodsQueryStatus: queryState.loading,
+    });
     getProductList()
-        .then((productList) => {
-          this.setState({
-            goodsQueryStatus: queryState.success,
-            goodsQueryError: null,
-            goods: productList,
-          })
-
-        })
-        .catch((error) => {
-          this.setState({
-            goodsQueryStatus: queryState.error,
-            goodsQueryError: error,
-          })
-
-        })
-  }
+      .then((productList) => {
+        this.setState({
+          goodsQueryStatus: queryState.success,
+          goodsQueryError: null,
+          goods: productList,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          goodsQueryStatus: queryState.error,
+          goodsQueryError: error,
+        });
+      });
+  };
 
   loadCategories = () => {
     this.setState({
-      categoriesQueryStatus: queryState.loading
-    })
+      categoriesQueryStatus: queryState.loading,
+    });
     getCategoriesList()
-        .then((categoriesList) => {
-          this.setState({
-            categoriesQueryStatus: queryState.success,
-            categoriesQueryError: null,
-            categories: categoriesList,
-          })
+      .then((categoriesList) => {
+        this.setState({
+          categoriesQueryStatus: queryState.success,
+          categoriesQueryError: null,
+          categories: categoriesList,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          categoriesQueryStatus: queryState.error,
+          categoriesQueryError: error,
+        });
+      });
+  };
 
-        })
-        .catch((error) => {
-          this.setState({
-            categoriesQueryStatus: queryState.error,
-            categoriesQueryError: error,
-          })
-        })
-  }
-
-  getFilteredProducts () {
-    const { goods,
+  getFilteredProducts() {
+    const {
+      goods,
       titleFilterValue,
       priceFilterMin,
       priceFilterMax,
@@ -91,102 +86,85 @@ class Catalog extends React.PureComponent {
       isNewFilter,
       isInStockFilter,
       isSaleFilter,
-      categoryFilter} = this.state;
+      categoryFilter,
+    } = this.state;
 
     return goods.filter((product) => {
       let isPass = true;
 
-      if (titleFilterValue.trim() !== '') {
-        let isMatch = product.title.toLocaleLowerCase().includes(titleFilterValue.toLocaleLowerCase());
-        isPass = isPass && isMatch
+      if (titleFilterValue.trim() !== "") {
+        let isMatch = product.title
+          .toLocaleLowerCase()
+          .includes(titleFilterValue.toLocaleLowerCase());
+        isPass = isPass && isMatch;
       }
 
       const price = parseFloat(product.price);
-      isPass = isPass && (
-          price >= priceFilterMin && price <= priceFilterMax
-      )
+      isPass = isPass && price >= priceFilterMin && price <= priceFilterMax;
 
       const rating = parseFloat(product.rating);
-      isPass = isPass && (
-          rating <= ratingFilter
-      )
+      isPass = isPass && rating <= ratingFilter;
 
-      if (isInStockFilter)
-      isPass = isPass && (
-          product.isInStock
-      )
-      if (isNewFilter)
-      isPass = isPass && (
-          product.isNew
-      )
-      if (isSaleFilter)
-      isPass = isPass && (
-          product.isSale
-      )
+      if (isInStockFilter) isPass = isPass && product.isInStock;
+      if (isNewFilter) isPass = isPass && product.isNew;
+      if (isSaleFilter) isPass = isPass && product.isSale;
 
       const categoriesData = product.categories;
-      isPass = isPass && (
-          categoriesData.includes(categoryFilter)
-      )
-
-
+      if (categoryFilter === "") {
         return isPass;
+      } else {
+        isPass = isPass && categoriesData.includes(categoryFilter);
+      }
 
-    })
-
+      return isPass;
+    });
   }
 
   searchHandler = (value) => {
-    this.setState({titleFilterValue: value})
-  }
+    this.setState({ titleFilterValue: value });
+  };
   priceHandler = (priceMin, priceMax) => {
-    this.setState({priceFilterMin: priceMin, priceFilterMax: priceMax})
-  }
+    this.setState({ priceFilterMin: priceMin, priceFilterMax: priceMax });
+  };
   ratingHandler = (value) => {
-    this.setState({ratingFilter: value})
-  }
+    this.setState({ ratingFilter: value });
+  };
 
   isNewCheckboxHandler = (value) => {
-    this.setState((currentState) => {
+    this.setState(() => {
       return {
-      isNewFilter: value
-      }
-    })
-  }
+        isNewFilter: value,
+      };
+    });
+  };
 
   isSaleCheckboxHandler = (value) => {
-    this.setState((currentState) => {
+    this.setState(() => {
       return {
-        isSaleFilter: value
-      }
-    })
-
-  }
+        isSaleFilter: value,
+      };
+    });
+  };
 
   isInStockCheckboxHandler = (value) => {
-    this.setState((currentState) => {
+    this.setState(() => {
       return {
-        isInStockFilter: value
-      }
-    })
-
-  }
+        isInStockFilter: value,
+      };
+    });
+  };
 
   categoryHandler = (value) => {
-    this.setState((currentState) => {
+    this.setState(() => {
       return {
-        categoryFilter: value
-      }
-    })
-  }
-
-
-
-
+        categoryFilter: value,
+      };
+    });
+  };
 
   render() {
-
-    const {goods,
+    const {
+      goods,
       goodsQueryStatus,
       goodsQueryError,
       categories,
@@ -202,70 +180,73 @@ class Catalog extends React.PureComponent {
       categoryFilter,
     } = this.state;
 
-    const isLoadingProducts = goodsQueryStatus === queryState.loading || goodsQueryStatus === queryState.initial;
+    const isLoadingProducts =
+      goodsQueryStatus === queryState.loading ||
+      goodsQueryStatus === queryState.initial;
     const isSuccessProducts = goodsQueryStatus === queryState.success;
     const isErrorProducts = goodsQueryStatus === queryState.error;
 
-    const isLoadingCategories = categoriesQueryStatus === queryState.loading || categoriesQueryStatus === queryState.initial;
+    const isLoadingCategories =
+      categoriesQueryStatus === queryState.loading ||
+      categoriesQueryStatus === queryState.initial;
     const isSuccessCategories = categoriesQueryStatus === queryState.success;
     const isErrorCategories = categoriesQueryStatus === queryState.error;
 
-    const filteredGoods = this.getFilteredProducts()
+    const filteredGoods = this.getFilteredProducts();
     return (
       <div className="catalog">
         <div className="container">
           <div className="row">
             <div className="catalog-categories col-3">
-              {isLoadingCategories && (
-                  <div>Loading Categories...</div>
-              )}
+              {isLoadingCategories && <div>Loading Categories...</div>}
 
               {!isLoadingCategories && isSuccessCategories && (
-                  <Categories
-                      categories={categories}
-                      categoryFilter={categoryFilter}
-                      categoryHandler={this.categoryHandler}
-                  />
-
+                <Categories
+                  categories={categories}
+                  categoryFilter={categoryFilter}
+                  categoryHandler={this.categoryHandler}
+                />
               )}
 
               {isErrorCategories && (
-                  <div>{categoriesQueryError?.message || "Error with categories :("}</div>
+                <div>
+                  {categoriesQueryError?.message || "Error with categories :("}
+                </div>
               )}
-
             </div>
             <div className="catalog-goods col-9">
               <div className="goods-filters">
                 <Filters
-                    titleFilterValue={titleFilterValue}
-                    priceFilterMin={priceFilterMin}
-                    priceFilterMax={priceFilterMax}
-                    ratingFilter={ratingFilter}
-                    isNewFilter={isNewFilter}
-                    isInStockFilter={isInStockFilter}
-                    isSaleFilter={isSaleFilter}
-                    categoryFilter={categoryFilter}
-                    searchHandler={this.searchHandler}
-                         priceHandler={this.priceHandler}
-                         ratingHandler={this.ratingHandler}
-                         isNewCheckboxHandler={this.isNewCheckboxHandler}
-                         isSaleCheckboxHandler={this.isSaleCheckboxHandler}
-                         isInStockCheckboxHandler={this.isInStockCheckboxHandler}
+                  titleFilterValue={titleFilterValue}
+                  priceFilterMin={priceFilterMin}
+                  priceFilterMax={priceFilterMax}
+                  ratingFilter={ratingFilter}
+                  isNewFilter={isNewFilter}
+                  isInStockFilter={isInStockFilter}
+                  isSaleFilter={isSaleFilter}
+                  categoryFilter={categoryFilter}
+                  searchHandler={this.searchHandler}
+                  priceHandler={this.priceHandler}
+                  ratingHandler={this.ratingHandler}
+                  isNewCheckboxHandler={this.isNewCheckboxHandler}
+                  isSaleCheckboxHandler={this.isSaleCheckboxHandler}
+                  isInStockCheckboxHandler={this.isInStockCheckboxHandler}
                 />
-
               </div>
               <div className="goods-goods d-flex">
-                {isLoadingProducts && (
-                    <div>Loading Products...</div>
-                )}
+                {isLoadingProducts && <div>Loading Products...</div>}
                 {!isLoadingProducts && isSuccessProducts && (
-                    <Goods goods={filteredGoods} allProductAmount={goods.length}/>
+                  <Goods
+                    goods={filteredGoods}
+                    allProductAmount={goods.length}
+                  />
                 )}
 
                 {!isLoadingProducts && isErrorProducts && (
-                    <div>{goodsQueryError?.message || "Error with products :("}</div>
+                  <div>
+                    {goodsQueryError?.message || "Error with products :("}
+                  </div>
                 )}
-
               </div>
             </div>
           </div>

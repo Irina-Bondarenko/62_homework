@@ -3,13 +3,7 @@ import "./css/header.css";
 import StoreTwoToneIcon from "@mui/icons-material/StoreTwoTone";
 import ShoppingBasketTwoToneIcon from "@mui/icons-material/ShoppingBasketTwoTone";
 
-
-class Header extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {};
-  }
+class Header extends React.PureComponent {
 
   render() {
     return (
